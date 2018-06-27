@@ -5,12 +5,17 @@
  */
 package game.tests;
 
+import game.tarot.Couleur;
+
 /**
  *
  * @author paul
  */
 public class Test {
     public static void main(String[] args) {
-        
+        System.out.println("Hello");
+
+        Couleur c = new Couleur(2);
+        System.out.println("test import : " + c);
     }
 }
