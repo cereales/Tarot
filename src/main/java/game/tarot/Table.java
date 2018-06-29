@@ -23,7 +23,7 @@ public class Table {
     private Set<Annonce> annoncesAttaque;
     private Set<Annonce> annoncesDefense;
     
-    private int etat;
+    private Etat etat;
     private int premierJoueur;
     
     
