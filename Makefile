@@ -6,26 +6,27 @@ GAMEPATH=src/main/java/game
 
 
 
-all: clean tarot test_mouvements_cartes
+all: clean utils tests
+utils: tarot
+tests: utils AbstractTest tests_list
+tests_list: test_Test test_TestMouvementsCartes test_GeneralTest
+
+# needed, but why...
+useless_list: Test TestMouvementsCartes GeneralTest
 
 
-### Liste des tests
 
-test: Test
-	java $(CLASSPATH) game.tests.$< 
-
-test_mouvements_cartes: TestMouvementsCartes
+### Execution des tests
+test_%: %
 	java $(CLASSPATH) game.tests.$<
-
-
-### Compilation des tests
-%: $(GAMEPATH)/tests/%.java
-	$(CC) $(CLASSPATH) $(SOURCEPATH) $(DESTPATH) $<
-
 
 ### Compilation du modele
 tarot:
 	$(CC) $(CLASSPATH) $(SOURCEPATH) $(DESTPATH) $(GAMEPATH)/tarot/*.java
+
+### Compilation des tests
+%: $(GAMEPATH)/tests/%.java
+	$(CC) $(CLASSPATH) $(SOURCEPATH) $(DESTPATH) $<
 
 
 
