@@ -5,14 +5,15 @@
  */
 package game.tarot;
 
-import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
  * @author paul
  */
 public class Joueur {
-    protected Set<Carte> main;
+    protected List<Carte> main;
     
     
     /**
@@ -22,6 +23,9 @@ public class Joueur {
      * @throws IllegalArgumentException si le compte n'existe pas.
      */
     public Joueur(String id, String mdp) throws IllegalArgumentException {
+        main = new ArrayList();
+        // Debug
+        
     }
     
     /**

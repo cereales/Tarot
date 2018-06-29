@@ -21,4 +21,9 @@ public class Carte {
      */
     public Carte(int valeur, Couleur couleur) {
     }
+
+    @Override
+    public String toString() {
+        return "R0";
+    }
 }

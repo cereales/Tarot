@@ -5,7 +5,8 @@
  */
 package game.tarot;
 
-import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
@@ -14,14 +15,25 @@ import java.util.Set;
 public class JeuCartes {
     private int nbJoueurs;
     
-    private Set<Carte> paquet;
-    private Set<Joueur> joueurs; // Pour stocker les mains et les modifier.
-    private Set<Carte> table; // Pour le chien et le jeu.
-    private Set<Carte> plisAttaque;
-    private Set<Carte> plisDefense;
+    private List<Carte> paquet;
+    private List<Joueur> joueurs; // Pour stocker les mains et les modifier.
+    private List<Carte> table; // Pour le chien et le jeu.
+    private List<Carte> plisAttaque;
+    private List<Carte> plisDefense;
     
     
     public JeuCartes() {
+        paquet = new ArrayList<Carte>();
+        joueurs = new ArrayList<Joueur>();
+        table = new ArrayList<Carte>();
+        plisAttaque = new ArrayList<Carte>();
+        plisDefense = new ArrayList<Carte>();
+
+        // Debug
+        for (int i = 0; i < 89; ++i) paquet.add(new Carte(i, new Couleur(0)));
+        nbJoueurs = 2;
+        joueurs.add(new Joueur("bob", "bob"));
+        joueurs.add(new Joueur("paul", "paul"));
     }
     
     
@@ -37,10 +49,10 @@ public class JeuCartes {
     
     /**
      * Distribue les cartes.
-     * @param nbJoueur 
+     * @param nbJoueurs
      * @return false si le nombre de joueur est interdit.
      */
-    public boolean distribuer(int nbJoueur) {
+    public boolean distribuer(int nbJoueurs) {
         return false;
     }
     
@@ -124,5 +136,41 @@ public class JeuCartes {
      */
     public int compterPoints() {
         return -1;
+    }
+    
+
+    /**
+     * Only for debug.
+     */
+    @Override
+    public String toString() {
+        String res = "";
+        String sep = ".----------.-------------------------------------------------------------.";
+
+        res += sep + '\n';
+        res += "|  PAQUET  |" + addCartesOf(paquet, sep) + '\n';
+        for (int n = 0; n < nbJoueurs; ++n) {
+            res += "|    J" + (n + 1) + "    |" + addCartesOf(joueurs.get(n).main, sep) + '\n';
+        }
+        res += "|  TABLE   |" + addCartesOf(table, sep) + '\n';
+        res += "| PLIS ATT |" + addCartesOf(plisAttaque, sep) + '\n';
+        res += "| PLIS DEF |" + addCartesOf(plisDefense, sep);
+
+        return res;
+    }
+
+    /**
+     * Returns what is in the paquet.
+     */
+    private String addCartesOf(List<Carte> paquet, String sep) {
+        String res = " ";
+        int i = 0;
+        while (i < paquet.size()) {
+            if (i % 20 == 0 && i != 0) res += "|\n|          | ";
+            res += paquet.get(i++) + " ";
+        }
+        for (int tmp = 0; tmp < 19 - (i-1) % 20; ++tmp) res += "   ";
+        res += "|\n" + sep;
+        return res;
     }
 }
