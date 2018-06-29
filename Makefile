@@ -4,24 +4,32 @@ SOURCEPATH=-sourcepath src/
 DESTPATH=-d build/
 GAMEPATH=src/main/java/game
 
+# Debug
+all: compile _tests
+
+# Ajouter les tests ici
+_tests_list: _test_Test _test_TestMouvementsCartes
 
 
-all: clean utils tests
-utils: tarot
-tests: utils AbstractTest tests_list
-tests_list: test_Test test_TestMouvementsCartes test_GeneralTest
+
+### Internal
+
+compile: clean _utils
+test: _test_GeneralTest
+_utils: _tarot
+_tests: _utils AbstractTest _tests_list
 
 # needed, but why...
-useless_list: Test TestMouvementsCartes GeneralTest
+_useless_list: Test TestMouvementsCartes GeneralTest
 
 
 
 ### Execution des tests
-test_%: %
+_test_%: %
 	java $(CLASSPATH) game.tests.$<
 
 ### Compilation du modele
-tarot:
+_tarot:
 	$(CC) $(CLASSPATH) $(SOURCEPATH) $(DESTPATH) $(GAMEPATH)/tarot/*.java
 
 ### Compilation des tests
