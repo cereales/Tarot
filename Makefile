@@ -4,16 +4,26 @@ SOURCEPATH=-sourcepath src/
 DESTPATH=-d build/
 GAMEPATH=src/main/java/game
 
-all: test
 
 
-test: build/game/tests/Test.class tarot
-	java $(CLASSPATH) game.tests.Test 
-
-build/game/tests/Test.class: src/main/java/game/tests/Test.java
-	$(CC) $(CLASSPATH) $(SOURCEPATH) $(DESTPATH) $(GAMEPATH)/tests/Test.java 
+all: clean tarot test_mouvements_cartes
 
 
+### Liste des tests
+
+test: Test
+	java $(CLASSPATH) game.tests.$< 
+
+test_mouvements_cartes: TestMouvementsCartes
+	java $(CLASSPATH) game.tests.$<
+
+
+### Compilation des tests
+%: $(GAMEPATH)/tests/%.java
+	$(CC) $(CLASSPATH) $(SOURCEPATH) $(DESTPATH) $<
+
+
+### Compilation du modele
 tarot:
 	$(CC) $(CLASSPATH) $(SOURCEPATH) $(DESTPATH) $(GAMEPATH)/tarot/*.java
 
