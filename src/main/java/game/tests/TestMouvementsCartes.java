@@ -5,19 +5,19 @@
  */
 package game.tests;
 
-import game.tarot.Couleur;
+import game.tarot.JeuCartes;
 
 /**
  *
  * @author paul
  */
-public class Test extends AbstractTest {
+public class TestMouvementsCartes extends AbstractTest {
     public static void main(String[] args) {
-        System.out.println("Hello");
+        System.out.println("\n##  Start  ##");
 
-        Couleur c = new Couleur(2);
-        System.out.println("test import : " + c);
-
-        ASSERT_EQ(0, 0);
+        JeuCartes jeu = new JeuCartes();
+        System.out.println("Creation du jeu :\n" + jeu);
+        
+        System.out.println("##   End   ##\n");
     }
 }
