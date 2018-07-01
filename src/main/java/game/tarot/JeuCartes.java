@@ -5,6 +5,7 @@
  */
 package game.tarot;
 
+import static java.lang.Math.random;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -44,7 +45,24 @@ public class JeuCartes {
      * @return false si la coupe est interdite.
      */
     public boolean couper(int pourcentage) {
-        return false;
+        if (table.size() != 0 || plisAttaque.size() != 0
+                || plisDefense.size() != 0)
+            return false;
+        for (Joueur joueur: joueurs) {
+            if (joueur.main.size() != 0)
+                return false;
+        }
+        
+        assert(7 <= pourcentage && pourcentage <= 93);
+        int coupe;
+        do {
+            coupe = (int) (pourcentage + (20 * random() - 10));
+        } while (pourcentage < 7 && 93 > pourcentage);
+        
+        for (int i = 0; i < paquet.size() * pourcentage / 100; ++i) {
+            paquet.add(paquet.remove(0));
+        }
+        return true;
     }
     
     /**

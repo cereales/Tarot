@@ -18,6 +18,9 @@ public class TestMouvementsCartes extends AbstractTest {
         JeuCartes jeu = new JeuCartes();
         System.out.println("Creation du jeu :\n" + jeu);
         
+        jeu.couper(50);
+        System.out.println(jeu);
+        
         System.out.println("##   End   ##\n");
     }
 }
