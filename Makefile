@@ -1,19 +1,22 @@
 CC=javac
-CLASSPATH=-classpath build/
+CLASSPATH=-classpath target/classes/
 SOURCEPATH=-sourcepath src/
-DESTPATH=-d build/
+DESTPATH=-d target/classes/
 GAMEPATH=src/main/java/game
 
 # Debug
 all: compile _tests
 
 # Ajouter les tests ici
+# SYNTAXE : _test_XX (XX = name of class)
 _tests_list: _test_Test _test_TestMouvementsCartes
 
 
 
 ### Internal
 
+init:
+	mkdir target/classes/
 compile: clean _utils
 test: _test_GeneralTest
 _utils: _tarot
@@ -39,6 +42,6 @@ _tarot:
 
 
 clean:
-	rm -rf build/game/tests/*.class
-	rm -rf build/game/tarot/*.class
+	rm -rf target/classes//game/tests/*.class
+	rm -rf target/classes//game/tarot/*.class
 
