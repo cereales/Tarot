@@ -1,35 +1,47 @@
 CC=javac
-CLASSPATH=-classpath build/
+CLASSPATH=-classpath target/classes/
 SOURCEPATH=-sourcepath src/
-DESTPATH=-d build/
+DESTPATH=-d target/classes/
 GAMEPATH=src/main/java/game
 
+# Debug
+all: compile _tests
+
+# Ajouter les tests ici
+# SYNTAXE : _test_XX (XX = name of class)
+_tests_list: _test_Test _test_TestMouvementsCartes
 
 
-all: clean tarot test_mouvements_cartes
+
+### Internal
+
+init:
+	mkdir target/classes/
+compile: clean _utils
+test: _test_GeneralTest
+_utils: _tarot
+_tests: _utils AbstractTest _tests_list
+
+# needed, but why...
+_useless_list: Test TestMouvementsCartes GeneralTest
 
 
-### Liste des tests
 
-test: Test
-	java $(CLASSPATH) game.tests.$< 
-
-test_mouvements_cartes: TestMouvementsCartes
+### Execution des tests
+_test_%: %
 	java $(CLASSPATH) game.tests.$<
 
+### Compilation du modele
+_tarot:
+	$(CC) $(CLASSPATH) $(SOURCEPATH) $(DESTPATH) $(GAMEPATH)/tarot/*.java
 
 ### Compilation des tests
 %: $(GAMEPATH)/tests/%.java
 	$(CC) $(CLASSPATH) $(SOURCEPATH) $(DESTPATH) $<
 
 
-### Compilation du modele
-tarot:
-	$(CC) $(CLASSPATH) $(SOURCEPATH) $(DESTPATH) $(GAMEPATH)/tarot/*.java
-
-
 
 clean:
-	rm -rf build/game/tests/*.class
-	rm -rf build/game/tarot/*.class
+	rm -rf target/classes//game/tests/*.class
+	rm -rf target/classes//game/tarot/*.class
 
