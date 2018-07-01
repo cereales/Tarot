@@ -9,12 +9,19 @@ import java.util.List;
 import java.util.ArrayList;
 
 /**
- *
+ * Classe d'un joueur humain.
+ * Override pour IA.
  * @author paul
  */
 public class Joueur {
     protected List<Carte> main;
     
+
+    private void Constructor() {
+        main = new ArrayList();
+        // Debug
+        
+    }
     
     /**
      * Constructeur d'un compte déjà existant.
@@ -23,9 +30,7 @@ public class Joueur {
      * @throws IllegalArgumentException si le compte n'existe pas.
      */
     public Joueur(String id, String mdp) throws IllegalArgumentException {
-        main = new ArrayList();
-        // Debug
-        
+        Constructor();
     }
     
     /**
@@ -37,7 +42,16 @@ public class Joueur {
      */
     public Joueur(String id, String mdp, String email)
             throws IllegalArgumentException {
+        Constructor();
     }
+    
+    /**
+     * Constructeur général.
+     */
+    public Joueur() {
+        Constructor();
+    }
+    
     
     /**
      * Ajoute les score au profil et reinitialise les scores du joueur.
