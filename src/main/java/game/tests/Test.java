@@ -17,14 +17,14 @@ public class Test extends AbstractTest {
         System.out.println("\n##  Start  ##");
 
         Couleur c = Couleur.ATOUT;
-        out.println("test import : " + c);
+        println("test import : " + c);
 
         ASSERT_EQ(0, 0);
         
         Etat etat = Etat.INSCRIPTION;
-        out.println("test etat : " + etat);
+        println("test etat : " + etat);
         etat = Etat.ABANDON;
-        out.println("test etat : " + etat);
+        println("test etat : " + etat);
         
         System.out.println("##   End   ##\n");
     }

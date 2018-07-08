@@ -14,7 +14,7 @@ import java.io.PrintStream;
  * @author paul
  */
 public abstract class AbstractTest {
-    protected static PrintStream out = System.out;
+    private static boolean isSingleTest = true;
     
     public AbstractTest() {
     }
@@ -23,10 +23,16 @@ public abstract class AbstractTest {
      * Allows to test with assert functions.
      */
     public void test_assert() throws FileNotFoundException {
-        this.out = new PrintStream("a.txt");
+        isSingleTest = false;
         throw new UnsupportedOperationException("Not supported yet.");
     }
+    
+    public static void println(String str) {
+        if (isSingleTest)
+            System.out.println(str);
+    }
 
+    
     public static void ASSERT_EQ(int num1, int num2) {
     }
 }
