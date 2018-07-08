@@ -13,14 +13,14 @@ import game.tarot.JeuCartes;
  */
 public class TestMouvementsCartes extends AbstractTest {
     public static void main(String[] args) {
-        System.out.println("\n##  Start  ##");
+        println("\n##  Start  ##");
 
         JeuCartes jeu = new JeuCartes();
-        System.out.println("Creation du jeu :\n" + jeu);
+        println("Creation du jeu :\n" + jeu);
         
         jeu.couper(50);
-        System.out.println(jeu);
+        println(jeu);
         
-        System.out.println("##   End   ##\n");
+        println("##   End   ##\n");
     }
 }

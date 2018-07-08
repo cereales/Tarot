@@ -27,7 +27,7 @@ public abstract class AbstractTest {
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
-    public static void println(String str) {
+    public static void println(Object str) {
         if (isSingleTest)
             System.out.println(str);
     }

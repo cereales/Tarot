@@ -5,6 +5,7 @@
  */
 package game.tarot;
 
+import java.util.List;
 import java.util.Set;
 
 
@@ -13,8 +14,8 @@ import java.util.Set;
  * @author paul
  */
 public class Table {
-    private Joueur[] joueurs;
-    private Score[] scores; // scores depuis la connexion
+    private List<Joueur> joueurs;
+    private List<Score>scores; // scores depuis la connexion
     private JeuCartes jeu;
     
     private int appelant;

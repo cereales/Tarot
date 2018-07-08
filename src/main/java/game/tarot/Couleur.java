@@ -11,8 +11,23 @@ package game.tarot;
  */
 public enum Couleur {
     ATOUT,
-    PIQUE,
-    COEUR,
-    TREFLE,
-    CARREAU;
+    PIQUE   ("P"),
+    COEUR   ("O"),
+    TREFLE  ("T"),
+    CARREAU ("A");
+    
+    private String abreviation;
+    
+    Couleur(String abreviation) {
+        this.abreviation = abreviation;
+    }
+    
+    Couleur() {
+        this.abreviation = this.name();
+    }
+    
+    @Override
+    public String toString() {
+        return this.abreviation;
+    }
 }

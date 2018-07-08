@@ -24,14 +24,24 @@ public class JeuCartes {
     
     
     public JeuCartes() {
-        paquet = new ArrayList<Carte>();
-        joueurs = new ArrayList<Joueur>();
-        table = new ArrayList<Carte>();
-        plisAttaque = new ArrayList<Carte>();
-        plisDefense = new ArrayList<Carte>();
+        paquet = new ArrayList();
+        joueurs = new ArrayList();
+        table = new ArrayList();
+        plisAttaque = new ArrayList();
+        plisDefense = new ArrayList();
 
+        for (Couleur couleur : Couleur.values()) {
+            int nbCartes = 14;
+            if (couleur.equals(Couleur.ATOUT)) {
+                nbCartes = 21;
+                paquet.add(new Carte(0, couleur));
+            }
+            for (int valeur = 1; valeur <= nbCartes; ++valeur) {
+                paquet.add(new Carte(valeur, couleur));
+            }
+        }
+        
         // Debug
-        for (int i = 0; i < 89; ++i) paquet.add(new Carte(i, new Couleur(0)));
         nbJoueurs = 2;
         joueurs.add(new Joueur("bob", "bob"));
         joueurs.add(new Joueur("paul", "paul"));
@@ -45,11 +55,11 @@ public class JeuCartes {
      * @return false si la coupe est interdite.
      */
     public boolean couper(int pourcentage) {
-        if (table.size() != 0 || plisAttaque.size() != 0
-                || plisDefense.size() != 0)
+        if (!table.isEmpty() || !plisAttaque.isEmpty()
+                || !plisDefense.isEmpty())
             return false;
         for (Joueur joueur: joueurs) {
-            if (joueur.main.size() != 0)
+            if (!joueur.main.isEmpty())
                 return false;
         }
         
