@@ -5,19 +5,26 @@
  */
 package game.tests;
 
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+
 /**
  * Allows tests to use ASSERT_xx functions.
  *
  * @author paul
  */
 public abstract class AbstractTest {
+    protected static PrintStream out = System.out;
+    
     public AbstractTest() {
     }
     
     /**
      * Allows to test with assert functions.
      */
-    public void test_assert() {
+    public void test_assert() throws FileNotFoundException {
+        this.out = new PrintStream("a.txt");
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public static void ASSERT_EQ(int num1, int num2) {
