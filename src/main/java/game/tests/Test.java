@@ -6,6 +6,7 @@
 package game.tests;
 
 import game.tarot.Couleur;
+import game.tarot.Etat;
 
 /**
  *
@@ -13,11 +14,18 @@ import game.tarot.Couleur;
  */
 public class Test extends AbstractTest {
     public static void main(String[] args) {
-        System.out.println("Hello");
+        System.out.println("\n##  Start  ##");
 
-        Couleur c = new Couleur(2);
+        Couleur c = Couleur.ATOUT;
         System.out.println("test import : " + c);
 
         ASSERT_EQ(0, 0);
+        
+        Etat etat = Etat.INSCRIPTION;
+        System.out.println("test etat : " + etat);
+        etat = Etat.ABANDON;
+        System.out.println("test etat : " + etat);
+        
+        System.out.println("##   End   ##\n");
     }
 }
