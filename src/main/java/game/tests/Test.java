@@ -16,7 +16,7 @@ public class Test {
     public static void main(String[] args) {
         System.out.println("\n##  Start  ##");
 
-        Couleur c = new Couleur(2);
+        Couleur c = Couleur.ATOUT;
         System.out.println("test import : " + c);
         
         Etat etat = Etat.INSCRIPTION;
