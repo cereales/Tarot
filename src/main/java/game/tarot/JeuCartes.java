@@ -8,6 +8,7 @@ package game.tarot;
 import static java.lang.Math.random;
 import java.util.List;
 import java.util.ArrayList;
+import static java.util.Arrays.sort;
 
 /**
  *
@@ -15,8 +16,9 @@ import java.util.ArrayList;
  */
 public class JeuCartes {
     private int nbJoueurs;
+    private static int NB_CARTES = 78;
     
-    private List<Carte> paquet;
+    private List<Carte> paquet; // la carte indicée 0 est celle du dessus du paquet
     private List<Joueur> joueurs; // Pour stocker les mains et les modifier.
     private List<Carte> table; // Pour le chien et le jeu.
     private List<Carte> plisAttaque;
@@ -29,32 +31,58 @@ public class JeuCartes {
         table = new ArrayList();
         plisAttaque = new ArrayList();
         plisDefense = new ArrayList();
+        nbJoueurs = 0;
 
+        List<Carte> tmp = new ArrayList();
         for (Couleur couleur : Couleur.values()) {
             int nbCartes = 14;
             if (couleur.equals(Couleur.ATOUT)) {
                 nbCartes = 21;
-                paquet.add(new Carte(0, couleur));
+                tmp.add(new Carte(0, couleur));
             }
             for (int valeur = 1; valeur <= nbCartes; ++valeur) {
-                paquet.add(new Carte(valeur, couleur));
+                tmp.add(new Carte(valeur, couleur));
             }
         }
-        
-        // Debug
-        nbJoueurs = 2;
-        joueurs.add(new Joueur("bob", "bob"));
-        joueurs.add(new Joueur("paul", "paul"));
+        for (int index = NB_CARTES - 1; index >= 0; --index) {
+            paquet.add(tmp.remove((int) (random() * index)));
+        }
     }
     
+    /**
+     * Ajoute les joueurs aux jeu.
+     * Doit etre appelé apres la construction.
+     * @param joueur
+     * @return id du joueur ajouté.
+     */
+    public int addJoueur(Joueur joueur) {
+        joueurs.add(joueur);
+        return nbJoueurs++;
+    }
     
     /**
      * Permet de couper le jeu de carte.
      * De l'aléatoire est ajouté.
-     * @param pourcentage entier compris entre 7 et 93.
+     * @param pourcentage entier compris entre 7 et 93. Pourcentage du paquet supérieur.
      * @return false si la coupe est interdite.
      */
     public boolean couper(int pourcentage) {
+        if (!enPaquet())
+            return false;
+        
+        assert(7 <= pourcentage && pourcentage <= 93);
+        int coupe;
+        do {
+            coupe = (int) (pourcentage + (20 * random() - 10));
+        } while (coupe < 7 && 93 > coupe);
+        
+        for (int i = 0; i < paquet.size() * coupe / 100; ++i) {
+            paquet.add(paquet.remove(0));
+        }
+        return true;
+    }
+    
+    private boolean enPaquet() {
         if (!table.isEmpty() || !plisAttaque.isEmpty()
                 || !plisDefense.isEmpty())
             return false;
@@ -62,26 +90,91 @@ public class JeuCartes {
             if (!joueur.main.isEmpty())
                 return false;
         }
-        
-        assert(7 <= pourcentage && pourcentage <= 93);
-        int coupe;
-        do {
-            coupe = (int) (pourcentage + (20 * random() - 10));
-        } while (pourcentage < 7 && 93 > pourcentage);
-        
-        for (int i = 0; i < paquet.size() * pourcentage / 100; ++i) {
-            paquet.add(paquet.remove(0));
-        }
         return true;
     }
     
     /**
      * Distribue les cartes.
-     * @param nbJoueurs
      * @return false si le nombre de joueur est interdit.
      */
-    public boolean distribuer(int nbJoueurs) {
-        return false;
+    public boolean distribuer(int distributeur) {
+        if (!enPaquet())
+            return false;
+        
+        int nbCartesChien;
+        switch (nbJoueurs) {
+            case 4:
+                nbCartesChien = 6;
+                break;
+            case 5:
+                nbCartesChien = 3;
+                break;
+            default:
+                return false;
+        }
+        int[] toursChien = new int[nbCartesChien];
+        do {
+            for (int i = 0; i < nbCartesChien; ++i) {
+                toursChien[i] = (int) ((random() * (NB_CARTES - 6 - nbCartesChien)) / 3 + 1) * 3;
+            }
+            sort(toursChien);
+        } while (!planChienCorrect(toursChien));
+        int decalage = 1;
+        for (int i = 1; i < nbCartesChien; ++i) {
+            toursChien[i] += decalage++;
+            if (toursChien[i - 1] == toursChien[i])
+                decalage++;
+        }
+        
+        int joueur = nextCircleIndex(distributeur, 0, nbJoueurs);
+        int indexTourChien = 0;
+        for (int tour = 0; tour < NB_CARTES; ++tour) {
+            if (toursChien[indexTourChien] == tour) { // carte au chien
+                indexTourChien = nextCircleIndex(indexTourChien, 0, nbCartesChien);
+                table.add(paquet.remove(0));
+            } else {
+                joueurs.get(joueur).main.add(paquet.remove(0));
+                joueurs.get(joueur).main.add(paquet.remove(0));
+                joueurs.get(joueur).main.add(paquet.remove(0));
+                joueur = nextCircleIndex(joueur, 0, nbJoueurs);
+                tour += 2;
+            }
+            //System.out.println(this);
+        }
+        return true;
+    }
+    
+    /**
+     * Returns the next value of currentValue.
+     * This value might be in [firstIndex, lastIndex).
+     * @param currentValue the value to increment of 1.
+     */
+    private int nextCircleIndex(int currentValue, int firstIndex, int lastIndex) {
+        assert(firstIndex < lastIndex);
+        ++currentValue;
+        while (currentValue >= lastIndex) {
+            currentValue -= lastIndex - firstIndex;
+        }
+        return currentValue;
+    }
+    
+    /**
+     * Verifie que toutes les cartes sont distribuées sur des tours differents.
+     * Un maximum de 2 cartes est toleré sur le meme tour.
+     * @param plan tableau trié
+     * @return si le tableau est correct
+     */
+    private boolean planChienCorrect(int[] plan) {
+        assert(plan[0] != 0);
+        int tolerance = 2;
+        for (int i = 1; i < plan.length ; ++i) {
+            if (plan[i - 1] == plan[i]) {
+                if (--tolerance == 0)
+                    return false;
+            } else
+                tolerance = 2;
+        }
+        return true;
     }
     
     /**

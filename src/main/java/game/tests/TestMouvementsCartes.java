@@ -6,6 +6,7 @@
 package game.tests;
 
 import game.tarot.JeuCartes;
+import game.tarot.Joueur;
 
 /**
  *
@@ -17,9 +18,16 @@ public class TestMouvementsCartes extends AbstractTest {
 
         JeuCartes jeu = new JeuCartes();
         println("Creation du jeu :\n" + jeu);
+        ASSERT_EQ(0, jeu.addJoueur(new Joueur("bob", "bob")));
+        ASSERT_EQ(1, jeu.addJoueur(new Joueur("paul", "paul")));
+        ASSERT_EQ(2, jeu.addJoueur(new Joueur("pierre", "pierre")));
+        ASSERT_EQ(3, jeu.addJoueur(new Joueur("jacques", "jacques")));
         
-        jeu.couper(50);
-        println(jeu);
+        ASSERT_EQ(true, jeu.couper(10));
+        println("Coupe :\n" + jeu);
+        
+        ASSERT_EQ(true, jeu.distribuer(0));
+        println("Distribution :\n" + jeu);
         
         println("##   End   ##\n");
     }
