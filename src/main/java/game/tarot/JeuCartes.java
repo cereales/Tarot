@@ -64,7 +64,7 @@ public class JeuCartes {
      * Permet de couper le jeu de carte.
      * De l'aléatoire est ajouté.
      * @param pourcentage entier compris entre 7 et 93. Pourcentage du paquet supérieur.
-     * @return false si la coupe est interdite.
+     * @return false si les cartes ne sont pas regroupees dans le paquet.
      */
     public boolean couper(int pourcentage) {
         if (!enPaquet())
@@ -179,10 +179,12 @@ public class JeuCartes {
     
     /**
      * Rassemble les cartes.
-     * @return false si l'action est interdite.
+     * @return false si les cartes ne sont pas toutes dans les plis.
      */
     public boolean ramasser() {
-        return false;
+        if (plisAttaque.size() + plisDefense.size() != NB_CARTES)
+            return false;
+        return true;
     }
     
     /**
@@ -200,10 +202,15 @@ public class JeuCartes {
     }
     
     /**
-     * Mettre les cartes du chien dans les plis de l'equipe.
+     * Mettre les cartes de la table dans les plis de l'equipe.
+     * Sert aussi pour le chien.
      * @param attaque : si true, les point vont à l'attaque. Sinon à la défense.
      */
-    public void ammasserChien(boolean attaque) {
+    public void ammasserCartes(boolean attaque) {
+        List<Carte> dest = (attaque) ? plisAttaque : plisDefense;
+        for (int index = table.size() - 1; index >= 0 ; --index) {
+            dest.add(table.remove(0));
+        }
     }
     
     /**
@@ -234,8 +241,31 @@ public class JeuCartes {
      * @param carte doit appartenir au joueur dont c'est le tour.
      * @return false si l'action est interdite.
      */
-    public boolean jouer(Carte carte) {
-        return false;
+    public boolean jouer(int joueur, Carte carte) {
+        if (table.isEmpty()) { // premier appel
+            if (!joueurs.get(joueur).main.remove(carte))
+                return false;
+            table.add(carte);
+        } else { // suivre a l'appel
+            if (!joueurs.get(joueur).getAuthorized(table.get(0), getMaxAtoutOnTable()).contains(carte))
+                return false;
+            joueurs.get(joueur).main.remove(carte);
+            table.add(carte);
+        }
+        return true;
+    }
+    
+    /**
+     * Renvoie la valeur du plus grand atout sur la table.
+     * @return 0 si pas d'atout.
+     */
+    private int getMaxAtoutOnTable() {
+        int val = 0;
+        for (Carte carte : table) {
+            if (carte.getCouleur().equals(Couleur.ATOUT) && carte.getValeur() > val)
+                val = carte.getValeur();
+        }
+        return val;
     }
     
     /**

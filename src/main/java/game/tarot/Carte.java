@@ -24,6 +24,15 @@ public class Carte {
         this.couleur = couleur;
     }
     
+    
+    public Couleur getCouleur() {
+        return this.couleur;
+    }
+    
+    public int getValeur() {
+        return this.valeur;
+    }
+    
     public String getNom() {
         if (this.couleur.equals(Couleur.ATOUT))
             return this.valeur + "D'ATOUT";
@@ -41,6 +50,12 @@ public class Carte {
                 }
             else
                 return this.valeur + " DE " + this.couleur.name();
+    }
+    
+    @Override
+    public boolean equals(Object carte) {
+        return ((Carte) carte).valeur == this.valeur
+                && ((Carte) carte).couleur == this.couleur;
     }
 
     @Override

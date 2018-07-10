@@ -11,16 +11,16 @@ import java.util.ArrayList;
 /**
  * Classe d'un joueur humain.
  * Override pour IA.
+ * Ne represente pas un Profil mais un joueur sur table.
  * @author paul
  */
 public class Joueur {
+    static Carte excuse = new Carte(0, Couleur.ATOUT);
     protected List<Carte> main;
     
 
     private void Constructor() {
         main = new ArrayList();
-        // Debug
-        
     }
     
     /**
@@ -60,6 +60,132 @@ public class Joueur {
     public void deconnecter(Score score) {
     }
     
+    
+    /**
+     * Renvoie une copy de la main.
+     * Permet de ne pas modifier la main.
+     * @return 
+     */
+    public List<Carte> getMain() {
+        List<Carte> copy = new ArrayList();
+        for (Carte carte : main) {
+            copy.add(carte);
+        }
+        return copy;
+    }
+    
+    /**
+     * Renvoie la liste des cartes jouables en fonction de la premiere carte
+     * jouee.
+     * @param carteAppelee
+     * @return 
+     */
+    public List<Carte> getAuthorized(Carte carteAppelee, int maxAtoutOnTable) {
+        if (carteAppelee.equals(excuse))
+            return getMain();
+        
+        List<Carte> copy = new ArrayList();
+        Couleur couleurAppelee = carteAppelee.getCouleur();
+        int valeurAppelee = carteAppelee.getValeur();
+        if (couleurAppelee.equals(Couleur.ATOUT)) {
+            if (hasAtoutSup(valeurAppelee))
+                copy.addAll(getAtoutsSup(valeurAppelee));
+            else if (hasAtout())
+                copy.addAll(getAtouts());
+            else
+                return getMain();
+        } else {
+            if (hasCouleur(couleurAppelee))
+                copy.addAll(getCouleurs(couleurAppelee));
+            else if (hasAtoutSup(maxAtoutOnTable))
+                copy.addAll(getAtoutsSup(maxAtoutOnTable));
+            else if (hasAtout())
+                copy.addAll(getAtouts());
+            else
+                return getMain();
+        }
+        if (main.contains(excuse))
+            copy.add(excuse);
+        
+        return copy;
+    }
+    
+    /**
+     * Renvoie vrai si la main contient des atouts.
+     * @return 
+     */
+    private boolean hasAtout() {
+        for (Carte carte : main) {
+            if (carte.getCouleur().equals(Couleur.ATOUT) && carte.getValeur() > 0)
+                return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Renvoie les atouts de la main.
+     * @return 
+     */
+    private List<Carte> getAtouts() {
+        List<Carte> copy = new ArrayList();
+        for (Carte carte : main) {
+            if (carte.getCouleur().equals(Couleur.ATOUT) && carte.getValeur() > 0)
+                copy.add(carte);
+        }
+        return copy;
+    }
+    
+    /**
+     * Renvoie vrai si la main contient des atouts superieurs a max
+     * @return 
+     */
+    private boolean hasAtoutSup(int max) {
+        for (Carte carte : main) {
+            if (carte.getCouleur().equals(Couleur.ATOUT) && carte.getValeur() > max)
+                return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Renvoie les atouts de la main superieurs a max
+     * @return 
+     */
+    private List<Carte> getAtoutsSup(int max) {
+        List<Carte> copy = new ArrayList();
+        for (Carte carte : main) {
+            if (carte.getCouleur().equals(Couleur.ATOUT) && carte.getValeur() > max)
+                copy.add(carte);
+        }
+        return copy;
+    }
+    
+    /**
+     * Renvoie vrai si la main contient la couleur appelee.
+     * @param couleurAppelee
+     * @return 
+     */
+    private boolean hasCouleur(Couleur couleurAppelee) {
+        for (Carte carte : main) {
+            if (carte.getCouleur().equals(couleurAppelee))
+                return true;
+        }
+        return false;
+    }
+    
+    /**
+     * Renvoie les cartes de la couleur de la main.
+     * @param couleurAppelee
+     * @return 
+     */
+    private List<Carte> getCouleurs(Couleur couleurAppelee) {
+        List<Carte> copy = new ArrayList();
+        for (Carte carte : main) {
+            if (carte.getCouleur().equals(couleurAppelee))
+                copy.add(carte);
+        }
+        return copy;
+    }
     
     /**
      * Permet de couper le jeu de carte.
