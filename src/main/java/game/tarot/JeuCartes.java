@@ -17,6 +17,8 @@ import static java.util.Arrays.sort;
 public class JeuCartes {
     private int nbJoueurs;
     private static int NB_CARTES = 78;
+    private static List<Carte> bouts = new ArrayList();
+    private int nbCartesChien = 0;
     
     private List<Carte> paquet; // la carte indicée 0 est celle du dessus du paquet
     private List<Joueur> joueurs; // Pour stocker les mains et les modifier.
@@ -47,6 +49,11 @@ public class JeuCartes {
         for (int index = NB_CARTES - 1; index >= 0; --index) {
             paquet.add(tmp.remove((int) (random() * index)));
         }
+        
+        //TODO : set static, change init
+        this.bouts.add(new Carte(0, Couleur.ATOUT));
+        this.bouts.add(new Carte(1, Couleur.ATOUT));
+        this.bouts.add(new Carte(21, Couleur.ATOUT));
     }
     
     /**
@@ -101,7 +108,6 @@ public class JeuCartes {
         if (!enPaquet())
             return false;
         
-        int nbCartesChien;
         switch (nbJoueurs) {
             case 4:
                 nbCartesChien = 6;
@@ -184,6 +190,7 @@ public class JeuCartes {
     public boolean ramasser() {
         if (plisAttaque.size() + plisDefense.size() != NB_CARTES)
             return false;
+        //TODO
         return true;
     }
     
@@ -191,6 +198,7 @@ public class JeuCartes {
      * Abandonne la partie en cours et ramasse les cartes.
      */
     public void abandonner() {
+        //TODO
     }
     
     
@@ -199,6 +207,10 @@ public class JeuCartes {
      * @param joueur 
      */
     public void donnerChien(int joueur) {
+        for (Carte carte : table) {
+            joueurs.get(joueur).main.add(carte);
+        }
+        table.removeAll(table);
     }
     
     /**
@@ -222,14 +234,43 @@ public class JeuCartes {
      * @return false si la carte n'appartient pas au joueur.
      */
     public boolean faireEcart(Carte carte, int joueur) {
-        return false;
+        if (joueurs.get(joueur).main.contains(carte)) {
+            joueurs.get(joueur).main.remove(carte);
+            table.add(carte);
+        } else if (table.contains(carte)) {
+            table.remove(carte);
+            joueurs.get(joueur).main.add(carte);
+        } else
+            return false;
+        return true;
     }
     
     /**
      * Valide l'écart.
-     * @return false si le nombre de cartes n'est pas le bon.
+     * @return false si le nombre de cartes n'est pas le bon
+     *         ou si les cartes mises sont interdites.
      */
     public boolean validerEcart() {
+        if (table.size() != nbCartesChien)
+            return false;
+        
+        if (!hasWrongChien(false, false))
+            return true;
+        else {
+            for (Carte carte : joueurs.get(0).main) {} //TODO
+        }
+        return true;
+    }
+    
+    /**
+     * Renvoie true si le chien contient des cartes a 4.5 points.
+     * @return 
+     */
+    private boolean hasWrongChien(boolean authorizeAtouts, boolean authorizedKings) {
+        for (Carte carte : table) {
+            if (carte.getCouleur().equals(Couleur.ATOUT) || carte.getValeur() == 14)
+                return true;
+        }
         return false;
     }
     
@@ -277,6 +318,7 @@ public class JeuCartes {
      *         -1 si erreur.
      */
     public int nouveauLanceur() {
+        //TODO
         return -1;
     }
     
@@ -286,6 +328,7 @@ public class JeuCartes {
      * @return le resultat.
      */
     public int compterPoints() {
+        //TODO
         return -1;
     }
     

@@ -188,6 +188,13 @@ public class Joueur {
     }
     
     /**
+     * Permet de trier la main.
+     */
+    public void trier() {
+        main.sort(null);
+    }
+    
+    /**
      * Permet de couper le jeu de carte.
      * La coupe ne doit pas etre plus petite qu'un plis (4%).
      * @param pourcentage entier compris entre 7 et 93.

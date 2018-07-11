@@ -9,7 +9,7 @@ package game.tarot;
  *
  * @author paul
  */
-public class Carte {
+public class Carte implements Comparable {
     private Couleur couleur;
     private int valeur;
     
@@ -50,6 +50,13 @@ public class Carte {
                 }
             else
                 return this.valeur + " DE " + this.couleur.name();
+    }
+    
+    @Override
+    public int compareTo(Object other) {
+        Carte o = (Carte) other;
+        return this.couleur.compareTo(o.couleur) * 22
+                + new Integer(valeur).compareTo(o.valeur);
     }
     
     @Override
