@@ -37,4 +37,9 @@ public abstract class AbstractTest {
         //TODO
         assert(num1.equals(num2));
     }
+    
+    public static void ASSERT_NE(Object num1, Object num2) {
+        //TODO
+        assert(!num1.equals(num2));
+    }
 }

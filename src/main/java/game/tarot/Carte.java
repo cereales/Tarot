@@ -52,6 +52,56 @@ public class Carte implements Comparable {
                 return this.valeur + " DE " + this.couleur.name();
     }
     
+    /**
+     * Renvoie le nombre de points de la carte en demis.
+     * Exemple : getPoints(dame de pique) = 7 demis (= 3.5)
+     * @return 
+     */
+    public int getPoints() {
+        if (couleur.equals(Couleur.ATOUT)) {
+            if (JeuCartes.bouts.contains(this))
+                return 9;
+            else
+                return 1;
+        }
+        switch (valeur) {
+            case 14:
+                return 9;
+            case 13:
+                return 7;
+            case 12:
+                return 5;
+            case 11:
+                return 3;
+            default:
+                return 1;
+        }
+    }
+    
+    /**
+     * Used for compare force of Cartes.
+     * this is the carte of the right Couleur.
+     * That is why this function is not reversible.
+     * @param o
+     * @return true if is stronger than o.
+     */
+    public boolean winsAgainst(Carte o) {
+        if (equals(JeuCartes.bouts.get(0)))
+            return false;
+        if (o.equals(JeuCartes.bouts.get(0)))
+            return true;
+        if (couleur.equals(Couleur.ATOUT))
+            return (! o.couleur.equals(Couleur.ATOUT)
+                    || o.valeur < valeur);
+        return (! couleur.equals(o.couleur) && ! o.couleur.equals(Couleur.ATOUT)
+                || couleur.equals(o.couleur) && valeur > o.valeur);
+    }
+    
+    /**
+     * Used for sort.
+     * @param other
+     * @return 
+     */
     @Override
     public int compareTo(Object other) {
         Carte o = (Carte) other;

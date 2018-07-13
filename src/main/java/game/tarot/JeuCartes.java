@@ -15,10 +15,18 @@ import static java.util.Arrays.sort;
  * @author paul
  */
 public class JeuCartes {
+    private static final int NB_CARTES = 78;
+    public static final List<Carte> bouts = new ArrayList();
+    static {
+        bouts.add(new Carte(0, Couleur.ATOUT));
+        bouts.add(new Carte(1, Couleur.ATOUT));
+        bouts.add(new Carte(21, Couleur.ATOUT));
+    }
+    
     private int nbJoueurs;
-    private static int NB_CARTES = 78;
-    private static List<Carte> bouts = new ArrayList();
     private int nbCartesChien = 0;
+    private int idExcuseOwner = -1;
+    private int idExcuseReceiver = -1;
     
     private List<Carte> paquet; // la carte indicée 0 est celle du dessus du paquet
     private List<Joueur> joueurs; // Pour stocker les mains et les modifier.
@@ -49,11 +57,6 @@ public class JeuCartes {
         for (int index = NB_CARTES - 1; index >= 0; --index) {
             paquet.add(tmp.remove((int) (random() * index)));
         }
-        
-        //TODO : set static, change init
-        this.bouts.add(new Carte(0, Couleur.ATOUT));
-        this.bouts.add(new Carte(1, Couleur.ATOUT));
-        this.bouts.add(new Carte(21, Couleur.ATOUT));
     }
     
     /**
@@ -153,11 +156,12 @@ public class JeuCartes {
     /**
      * Returns the next value of currentValue.
      * This value might be in [firstIndex, lastIndex).
-     * @param currentValue the value to increment of 1.
+     * @param currentValue the value to increment of 1. Cannot be less than firstIndex.
      */
-    private int nextCircleIndex(int currentValue, int firstIndex, int lastIndex) {
+    public int nextCircleIndex(int currentValue, int firstIndex, int lastIndex) {
         assert(firstIndex < lastIndex);
         ++currentValue;
+        assert(firstIndex <= currentValue);
         while (currentValue >= lastIndex) {
             currentValue -= lastIndex - firstIndex;
         }
@@ -190,7 +194,10 @@ public class JeuCartes {
     public boolean ramasser() {
         if (plisAttaque.size() + plisDefense.size() != NB_CARTES)
             return false;
-        //TODO
+        for (int i = plisAttaque.size(); i > 0; --i)
+            paquet.add(plisAttaque.remove(0));
+        for (int i = plisDefense.size(); i > 0; --i)
+            paquet.add(plisDefense.remove(0));
         return true;
     }
     
@@ -198,7 +205,13 @@ public class JeuCartes {
      * Abandonne la partie en cours et ramasse les cartes.
      */
     public void abandonner() {
-        //TODO
+        for (Joueur joueur : joueurs) {
+            for (int i = joueur.main.size(); i > 0; --i)
+                paquet.add(joueur.main.remove(0));
+        }
+        for (int i = table.size(); i > 0; --i)
+            paquet.add(table.remove(0));
+        ramasser();
     }
     
     
@@ -254,21 +267,26 @@ public class JeuCartes {
         if (table.size() != nbCartesChien)
             return false;
         
-        if (!hasWrongChien(false, false))
+        if (!hasWrongChien(false))
             return true;
-        else {
-            for (Carte carte : joueurs.get(0).main) {} //TODO
+        else if (!hasWrongChien(true)) {
+            for (Carte carte : joueurs.get(0).main) {
+                if (!carte.getCouleur().equals(Couleur.ATOUT) && carte.getValeur() != 14)
+                    return false;
+            }
+            return true;
         }
-        return true;
+        return false;
     }
     
     /**
-     * Renvoie true si le chien contient des cartes a 4.5 points.
+     * Renvoie true si le chien contient des cartes a 4.5 points ou des atouts.
      * @return 
      */
-    private boolean hasWrongChien(boolean authorizeAtouts, boolean authorizedKings) {
+    private boolean hasWrongChien(boolean authorizeAtouts) {
         for (Carte carte : table) {
-            if (carte.getCouleur().equals(Couleur.ATOUT) || carte.getValeur() == 14)
+            if (carte.getCouleur().equals(Couleur.ATOUT) && !authorizeAtouts
+                    || carte.getValeur() == 14)
                 return true;
         }
         return false;
@@ -313,23 +331,85 @@ public class JeuCartes {
      * Ressoud le plis précédant et renvoie le numéro du prochain joueur à
      * jouer.
      * Vérifie que le nombre de cartes tombées correspond au nombre de joueurs.
-     * Résoudre le plis signifie gérer le cas de l'excuse.
+     * L'excuse est conservée par son proprietaire (si non dernier tour).
+     * Elle est retirée de la table et est stockée à cote.
+     * @param first_joueur id du joueur qui lance la couleur.
      * @return le numéro du prochain joueur, cad le gagnant du plis.
      *         -1 si erreur.
      */
-    public int nouveauLanceur() {
-        //TODO
-        return -1;
+    public int nouveauLanceur(int id_first_joueur) {
+        assert(table.size() == nbJoueurs);
+        boolean setIdExcuseReceiver = false;
+        int indexGagnant = 0;
+        if (table.get(0).equals(bouts.get(0))) {
+            idExcuseOwner = nextCircleIndex(id_first_joueur - 1, 0, nbJoueurs);
+            setIdExcuseReceiver = true;
+        }
+        for (int index = 1; index < nbJoueurs; ++index) {
+            if (! table.get(indexGagnant).winsAgainst(table.get(index)))
+                indexGagnant = index;
+            else if (table.get(index).equals(bouts.get(0))) {
+                idExcuseOwner = nextCircleIndex(id_first_joueur + index - 1, 0, nbJoueurs);
+                setIdExcuseReceiver = true;
+            }
+        }
+        indexGagnant = nextCircleIndex(indexGagnant + id_first_joueur - 1, 0, nbJoueurs);
+        if (setIdExcuseReceiver) {
+            idExcuseReceiver = indexGagnant;
+            table.remove(bouts.get(0));
+        }
+        return indexGagnant;
     }
     
+    /**
+     * Prend une carte du pli du detenteur de l'excuse pour donner au gagnant
+     * du pli.
+     * @param camps tableau de taille nbJoueurs.
+     *              true si fait partie de l'attaque.
+     * @param force if true, force the add of excuse without exchange cards.
+     */
+    public void rendreCarteFromExcuse(boolean[] camps, boolean force) {
+        if (idExcuseOwner > -1) { // both id must change simultanely
+            List<Carte> src = (camps[idExcuseOwner]) ? plisAttaque : plisDefense;
+            List<Carte> dest = (camps[idExcuseReceiver]) ? plisAttaque : plisDefense;
+            Carte carte = findExchangeCard(src);
+            if (carte != null || force) {
+                src.add(bouts.get(0));
+                idExcuseOwner = -1;
+                idExcuseReceiver = -1;
+                if (carte != null) {
+                    src.remove(carte);
+                    dest.add(carte);
+                }
+            }
+        }
+    }
+    
+    public void rendreCarteFromExcuse(boolean[] camps) {
+        rendreCarteFromExcuse(camps, false);
+    }
+    
+    /**
+     * Cherche une carte de 1 demi point dans src.
+     * @param src
+     * @return null si aucune carte ne correspond
+     */
+    private Carte findExchangeCard(List<Carte> src) {
+        for (Carte carte : src)
+            if (carte.getPoints() == 1)
+                return carte;
+        return null;
+    }
     
     /**
      * Compte les points des plis de l'attaque.
-     * @return le resultat.
+     * @return le resultat en demi.
      */
     public int compterPoints() {
-        //TODO
-        return -1;
+        int res = 0;
+        for (Carte carte : plisAttaque)
+            res += carte.getPoints();
+        return res;
     }
     
 
