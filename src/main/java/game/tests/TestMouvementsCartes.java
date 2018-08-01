@@ -23,10 +23,10 @@ public class TestMouvementsCartes extends AbstractTest {
 
         JeuCartes jeu = new JeuCartes();
         println("Creation du jeu :\n" + jeu);
-        Joueur bob = new Joueur("bob", "bob");
-        Joueur paul = new Joueur("paul", "paul");
-        Joueur pierre = new Joueur("pierre", "pierre");
-        Joueur jacques = new Joueur("jacques", "jacques");
+        Joueur bob = new Joueur();
+        Joueur paul = new Joueur();
+        Joueur pierre = new Joueur();
+        Joueur jacques = new Joueur();
         ASSERT_EQ(0, jeu.addJoueur(bob));
         ASSERT_EQ(1, jeu.addJoueur(paul));
         ASSERT_EQ(2, jeu.addJoueur(pierre));

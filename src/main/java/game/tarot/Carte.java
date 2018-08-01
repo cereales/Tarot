@@ -99,8 +99,9 @@ public class Carte implements Comparable {
     
     /**
      * Used for sort.
+     * Assumes that enum is {0, 1, 2, ...} and returns (this - other).
      * @param other
-     * @return 
+     * @return this minus other
      */
     @Override
     public int compareTo(Object other) {

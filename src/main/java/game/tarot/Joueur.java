@@ -15,42 +15,16 @@ import java.util.ArrayList;
  * @author paul
  */
 public class Joueur {
-    static Carte excuse = new Carte(0, Couleur.ATOUT);
     protected List<Carte> main;
     
 
-    private void Constructor() {
-        main = new ArrayList();
-    }
-    
-    /**
-     * Constructeur d'un compte déjà existant.
-     * @param id du joueur enregistré
-     * @param mdp
-     * @throws IllegalArgumentException si le compte n'existe pas.
-     */
-    public Joueur(String id, String mdp) throws IllegalArgumentException {
-        Constructor();
-    }
-    
-    /**
-     * Constructeur d'un compte non existant.
-     * @param id
-     * @param mdp
-     * @param email 
-     * @throws IllegalArgumentException si le pseudo est déjà pris.
-     */
-    public Joueur(String id, String mdp, String email)
-            throws IllegalArgumentException {
-        Constructor();
-    }
-    
     /**
      * Constructeur général.
      */
     public Joueur() {
-        Constructor();
+        main = new ArrayList();
     }
+    
     
     
     /**
@@ -81,7 +55,7 @@ public class Joueur {
      * @return 
      */
     public List<Carte> getAuthorized(Carte carteAppelee, int maxAtoutOnTable) {
-        if (carteAppelee.equals(excuse))
+        if (carteAppelee.equals(JeuCartes.bouts.get(0)))
             return getMain();
         
         List<Carte> copy = new ArrayList();
@@ -104,8 +78,8 @@ public class Joueur {
             else
                 return getMain();
         }
-        if (main.contains(excuse))
-            copy.add(excuse);
+        if (main.contains(JeuCartes.bouts.get(0)))
+            copy.add(JeuCartes.bouts.get(0));
         
         return copy;
     }

@@ -10,8 +10,17 @@ package game.tarot;
  * @author paul
  */
 public class Score {
-    protected int[] nbVictoires;
-    protected int[] nbDefaites;
+    protected int nbVictoires;
+    protected int nbDefaites;
     protected int score;
-    protected int[] meilleurScore;
+    protected int meilleurScore;
+
+    
+    
+    public Score() {
+    }
+    
+    public Score(Score score) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
