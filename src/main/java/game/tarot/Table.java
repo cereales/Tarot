@@ -36,6 +36,11 @@ public class Table {
      * Doit initialiser le jeu de carte. Table à 0 joueurs par défaut.
      */
     public Table() {
+        joueurs = new ArrayList();
+        profils = new ArrayList();
+        scores = new ArrayList();
+        jeu = new JeuCartes();
+        etat = Etat.INSCRIPTION;
     }
     
     
@@ -79,6 +84,6 @@ public class Table {
      */
     @Override
     public String toString() {
-        return "";
+        return "* TABLE [" + etat.name() + "]";
     }
 }

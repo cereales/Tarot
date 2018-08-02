@@ -26,6 +26,10 @@ public class Test extends AbstractTest {
         etat = Etat.ABANDON;
         println("test etat : " + etat);
         
+        println("ecart enum : " + Etat.INSCRIPTION.compareTo(Etat.INTERRUPTION));
+        println("ecart enum : " + Etat.INTERRUPTION.compareTo(Etat.INTERRUPTION));
+        println("ecart enum : " + Etat.INTERRUPTION.compareTo(Etat.INSCRIPTION));
+        
         System.out.println("##   End   ##\n");
     }
 }
