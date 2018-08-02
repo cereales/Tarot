@@ -12,8 +12,7 @@ import game.tarot.Score;
  *
  * @author paul
  */
-public class Profil extends PublicProfil {
-    private Joueur joueur;
+public class Profil extends PrivateProfil {
     /**
      * Constructeur d'un compte déjà existant.
      * @param id du joueur enregistré
@@ -25,7 +24,6 @@ public class Profil extends PublicProfil {
         if (!singletonJoueurs.contains(id, mdp))
             throw new IllegalArgumentException("Wrong pseudo or password.");
         this.score = singletonJoueurs.getScore(id, mdp);
-        this.joueur = new Joueur();
     }
     
     /**
@@ -38,10 +36,5 @@ public class Profil extends PublicProfil {
     public Profil(String id, String mdp, String email)
             throws IllegalArgumentException {
         throw new UnsupportedOperationException("Not supported yet.");
-    }
-    
-    
-    public Joueur getJoueur() {
-        return joueur;
     }
 }

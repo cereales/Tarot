@@ -5,6 +5,7 @@
  */
 package game.tests;
 
+import game.connexion.Computer;
 import game.connexion.Profil;
 import game.tarot.Carte;
 import game.tarot.Couleur;
@@ -32,20 +33,19 @@ public class TestTable extends AbstractTest {
         Joueur bob = Pbob.getJoueur();
         ASSERT_EQ(true, table.rejoindre(Pbob, bob));
         ASSERT_EQ(false, table.rejoindre(Pbob, bob));
-        
-        Profil Ppaul = new Profil("paul", "mdp2");
+
+        Computer Ppaul = new Computer();
         Joueur paul = Ppaul.getJoueur();
         ASSERT_EQ(true, table.rejoindre(Ppaul, paul));
-        
-        Profil Ppierre = new Profil("pierre", "mdp2");
+
+        Computer Ppierre = new Computer();
         Joueur pierre = Ppierre.getJoueur();
         ASSERT_EQ(true, table.rejoindre(Ppierre, pierre));
-        
-        Profil Pjacques = new Profil("jacques", "mdp2");
+
+        Computer Pjacques = new Computer();
         Joueur jacques = Pjacques.getJoueur();
         ASSERT_EQ(true, table.rejoindre(Pjacques, jacques));
-        
-        
+
         
         println("\n##   End   ##\n");
     }
