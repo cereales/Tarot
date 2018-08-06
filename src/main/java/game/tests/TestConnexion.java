@@ -31,6 +31,8 @@ public class TestConnexion extends AbstractTest {
             ASSERT_EQ(1, 2); // ne doit pas etre execute
         } catch (IllegalArgumentException e) {}
         
+        singleton.createUser("pierre", "mdp");
+        
         println("\n##   End   ##\n");
     }
 }
