@@ -12,6 +12,7 @@ import game.tarot.Couleur;
 import game.tarot.JeuCartes;
 import game.tarot.Joueur;
 import game.connexion.SingletonJoueurs;
+import game.tarot.SingletonTables;
 import game.tarot.Table;
 import static java.lang.Math.random;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class TestTable extends AbstractTest {
         println("\n##  Start  ##\n");
 
         SingletonJoueurs singleton = SingletonJoueurs.getOccurence();
-        Table table = new Table();
+        Table table = SingletonTables.getOccurence().createTable();
         println(table);
         
         Profil Pbob = new Profil("bob", "mdp1");

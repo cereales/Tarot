@@ -35,7 +35,7 @@ public class Table {
      * Constructeur de la table de jeu.
      * Doit initialiser le jeu de carte. Table à 0 joueurs par défaut.
      */
-    public Table() {
+    protected Table() {
         joueurs = new ArrayList();
         profils = new ArrayList();
         scores = new ArrayList();
@@ -84,6 +84,18 @@ public class Table {
      */
     @Override
     public String toString() {
-        return "* TABLE [" + etat.name() + "]";
+        return "* TABLE " + getId() + " [" + etat.name() + "]";
+    }
+
+    public boolean isConnected(Joueur joueur) {
+        return joueurs.contains(joueur);
+    }
+
+    public Integer getId() {
+        return SingletonTables.getOccurence().getId(this);
+    }
+    
+    public Etat getEtat() {
+        return etat;
     }
 }

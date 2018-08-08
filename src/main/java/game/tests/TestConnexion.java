@@ -7,10 +7,6 @@ package game.tests;
 
 import game.connexion.Profil;
 import game.connexion.SingletonJoueurs;
-import game.tarot.Joueur;
-import game.tarot.Table;
-import static game.tests.AbstractTest.ASSERT_EQ;
-import static game.tests.AbstractTest.println;
 
 /**
  *

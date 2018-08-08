@@ -30,7 +30,7 @@ public class Joueur {
     /**
      * Ajoute les score au profil et reinitialise les scores du joueur.
      * @param score 
-     */
+     *
     public void deconnecter(Score score) {
     }
     

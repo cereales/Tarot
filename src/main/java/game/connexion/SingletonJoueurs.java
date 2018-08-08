@@ -20,8 +20,8 @@ import java.util.TreeSet;
 public class SingletonJoueurs {
     private static SingletonJoueurs singleton;
     
-    private Database database;
-    private Set<String> idConnected;
+    private final Database database;
+    private final Set<String> idConnected;
     
     
     private SingletonJoueurs() {
@@ -42,6 +42,10 @@ public class SingletonJoueurs {
             return true;
         }
         return false;
+    }
+    
+    public void disconnect(String id) {
+        idConnected.remove(id);
     }
     
     public void createUser(String id, String mdp) {
