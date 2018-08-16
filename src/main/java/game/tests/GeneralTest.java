@@ -22,11 +22,24 @@ public class GeneralTest {
 
         System.out.println(C_GREEN + "[----------]" + C_BASIC);
 
-        Test.main(args);
-        Test.test_assert("Test");
+        try {
+            Test.main(args);
+            Test.test_assert("Test");
 
-        TestMouvementsCartes.main(args);
-        TestMouvementsCartes.test_assert("TestMouvementsCartes");
+            TestMouvementsCartes.main(args);
+            TestMouvementsCartes.test_assert("TestMouvementsCartes");
+
+            TestTable.main(args);
+            TestTable.test_assert("TestTable");
+
+            TestConnexion.main(args);
+            TestConnexion.test_assert("TestConnexion");
+
+            TestInterface.main(args);
+            TestInterface.test_assert("TestInterface");
+        } catch (Exception e) {
+            AbstractTest.nb_tests_failed++;
+        }
 
         System.out.println(C_GREEN + "[----------]" + C_BASIC);
 
