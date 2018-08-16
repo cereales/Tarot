@@ -31,12 +31,6 @@ import java.util.Random;
 
 public class BotListener extends PrivateInformations
 {
-    private static String C_BASIC = "\033[0m";
-    private static String C_YELLOW = "\033[33m";
-    private static String C_RED = "\033[31m";
-    private static String C_BLUE = "\033[34m";
-
-
     public static void main(String[] args)
     {
         try

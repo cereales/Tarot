@@ -5,15 +5,14 @@
  */
 package game.tests;
 
+import static fr.connexion.C_COULEUR.*;
+
 /**
  *
  * @author paul
  */
 public class GeneralTest {
     private static String[] args = new String[0];
-    public static String C_BASIC = "\033[0m";
-    public static String C_RED = "\033[31m";
-    public static String C_GREEN = "\033[32m";
 
 
     public static void main(String[] args) {

@@ -8,6 +8,8 @@ package game.tests;
 import java.util.ArrayList;
 import java.util.List;
 
+import static fr.connexion.C_COULEUR.*;
+
 /**
  * Allows tests to use ASSERT_xx functions.
  *
@@ -33,17 +35,17 @@ public abstract class AbstractTest {
      * Allows to test with assert functions.
      */
     public static void test_assert(String testName) {
-        System.out.println(GeneralTest.C_GREEN + "[  RUN     ]" + GeneralTest.C_BASIC + " " + testName);
+        System.out.println(C_GREEN + "[  RUN     ]" + C_BASIC + " " + testName);
         for (AssertionError e : print)
             e.printStackTrace();
         if (failed > 0) {
-            String failTrace = GeneralTest.C_RED +"[  FAILED  ]" + GeneralTest.C_BASIC + " " + testName;
+            String failTrace = C_RED +"[  FAILED  ]" + C_BASIC + " " + testName;
             failedTests += failTrace + "\n";
             System.out.println(failTrace);
             ++nb_tests_failed;
         }
         else
-            System.out.println(GeneralTest.C_GREEN + "[      OK  ]" + GeneralTest.C_BASIC + " " + testName);
+            System.out.println(C_GREEN + "[      OK  ]" + C_BASIC + " " + testName);
 
         failed = 0;
         asserted = 0;
