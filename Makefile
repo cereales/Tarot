@@ -16,8 +16,12 @@ _tests_list: _test_Test _test_TestMouvementsCartes
 ### Internal
 
 init:
+	mkdir target/
 	mkdir target/classes/
 compile: clean _utils
+	@echo ""
+	@echo "******  SUCCES  ******"
+	@echo ""
 test: _test_GeneralTest
 _utils: _tarot
 _tests: _utils AbstractTest _tests_list
