@@ -35,10 +35,11 @@ public class GeneralTest {
             TestConnexion.main(args);
             TestConnexion.test_assert("TestConnexion");
 
-            TestInterface.main(args);
+            TestInterface.finalInterface(null); // special for interactive test
             TestInterface.test_assert("TestInterface");
         } catch (Exception e) {
             AbstractTest.nb_tests_failed++;
+            AbstractTest.failedTests += C_RED +"[  FAILED  ] Failed during testing..." + C_BASIC;
         }
 
         System.out.println(C_GREEN + "[----------]" + C_BASIC);

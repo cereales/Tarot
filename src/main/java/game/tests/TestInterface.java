@@ -6,6 +6,7 @@
 package game.tests;
 
 import game.connexion.Profil;
+import game.connexion.SingletonJoueurs;
 import game.tarot.Table;
 import static game.tests.AbstractTest.println;
 import java.util.ArrayList;
@@ -25,11 +26,13 @@ public class TestInterface extends AbstractTest {
         
         //mainInterface(user);
         avancedInterface(user);
+        //finalInterface(user);
         
         println("\n##   End   ##\n");
     }
-    
-    public static void mainInterface(Profil user) {
+
+
+    private static void mainInterface(Profil user) {
         String tmp;
         
         Scanner reader = new Scanner(System.in);
@@ -66,5 +69,23 @@ public class TestInterface extends AbstractTest {
             question = user.execute(reader.nextInt());
         } while (user.isConnected());
         reader.close();
+    }
+
+    public static void finalInterface(Profil user) {
+        user = new Profil("bob", "mdp1");
+        String question = user.execute(0);
+        question = user.execute(2);
+        question = user.execute(3);
+        question = user.execute(2);
+        question = user.execute(1);
+        question = user.execute(2);
+        question = user.execute(1);
+        //TODO
+
+        // exit
+        question = user.execute(1);
+        question = user.execute(1);
+        question = user.execute(1);
+        SingletonJoueurs.getOccurence().disconnect("bob");
     }
 }

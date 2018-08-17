@@ -28,7 +28,9 @@ public class TestConnexion extends AbstractTest {
         } catch (IllegalArgumentException e) {}
         
         singleton.createUser("pierre", "mdp");
-        
+        singleton.disconnect("bob");
+        singleton.disconnect("pierre");
+
         println("\n##   End   ##\n");
     }
 }

@@ -34,6 +34,7 @@ public class TestTable extends AbstractTest {
         Joueur bob = Pbob.getJoueur();
         ASSERT_EQ(true, table.rejoindre(Pbob, bob));
         ASSERT_EQ(false, table.rejoindre(Pbob, bob));
+        singleton.disconnect("bob"); // allows other tests to run
 
         Computer Ppaul = new Computer();
         Joueur paul = Ppaul.getJoueur();
