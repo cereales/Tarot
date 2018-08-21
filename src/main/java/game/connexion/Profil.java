@@ -69,7 +69,7 @@ public class Profil extends PrivateProfil {
             switch (input) {
             case 1:
                 this.disconnect();
-                return "";
+                return "Disconnected.";
             case 2:
                 cmd_state = state.TABLES;
                 return execute(0);

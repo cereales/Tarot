@@ -45,8 +45,8 @@ public class SingletonJoueurs {
         idConnected.remove(id);
     }
     
-    public void createUser(String id, String mdp) {
-        database.addUser(id, mdp);
+    public boolean createUser(String id, String mdp) {
+        return database.addUser(id, mdp);
     }
 
     public Score getScore(String id, String mdp) {

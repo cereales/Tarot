@@ -37,7 +37,9 @@ public class DatabaseUser extends AbstractDatabase {
      * @param mdp
      * @return 
      */
-    boolean addUser(String id, String mdp) { //TODO add verification
+    boolean addUser(String id, String mdp) {
+        if (id.contains(";") || mdp.contains(";"))
+            return false;
         if (!data.containsKey(id)) {
             List l = new LinkedList();
             

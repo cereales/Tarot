@@ -15,22 +15,26 @@
  */
 
 import fr.connexion.PrivateInformations;
+import game.connexion.Profil;
+import game.connexion.SingletonJoueurs;
 import net.dv8tion.jda.client.entities.Group;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.exceptions.PermissionException;
-import net.dv8tion.jda.core.exceptions.RateLimitedException;
 
 import javax.security.auth.login.LoginException;
-import java.util.List;
-import java.util.Random;
+import java.util.HashMap;
+import java.util.Map;
+
+import static fr.connexion.C_COULEUR.*;
 
 public class BotListener extends PrivateInformations
 {
+    private static SingletonJoueurs singleton = SingletonJoueurs.getOccurence();
+    private static Map<String, Profil> profilsConnected;
+
     public static void main(String[] args)
     {
         try
@@ -48,6 +52,7 @@ public class BotListener extends PrivateInformations
         {
             e.printStackTrace();
         }
+        profilsConnected = new HashMap();
     }
 
     @Override
@@ -84,26 +89,67 @@ public class BotListener extends PrivateInformations
                 name = member.getEffectiveName();       //This will either use the Member's nickname if they have one,
             }                                           // otherwise it will default to their username. (User#getName())
 
-            System.out.printf("(%s)[%s]<%s>: %s\n", guild.getName(), textChannel.getName(), name, msg);
+            System.out.printf(C_GREEN + "(%s)[%s]<%s>: %s\n" + C_BASIC, guild.getName(), textChannel.getName(), name, msg);
         }
         else if (event.isFromType(ChannelType.PRIVATE)) //If this message was sent to a PrivateChannel
         {
             PrivateChannel privateChannel = event.getPrivateChannel();
 
-            System.out.printf("[PRIV]<%s>: %s\n", author.getName(), msg);
+            if (bot)
+                System.out.printf(C_YELLOW + "[PRIV]<%s>: %s\n" + C_BASIC, author.getName(), msg);
+            else
+                System.out.printf("[PRIV]<%s>: %s\n", author.getName(), msg);
+
+            Profil user;
+            String id = author.getId();
+            if (profilsConnected.containsKey(id)) // already connected
+            {
+                if (msg.length() == 1) {
+                    try {
+                        user = profilsConnected.get(id);
+                        channel.sendMessage(user.execute(new Integer(msg))).queue();
+                        if (!user.isConnected()) {
+                            profilsConnected.remove(id);
+                            System.out.println(C_BLUE + "connected " + C_BASIC + profilsConnected.keySet());
+                        }
+                    } catch (NumberFormatException e) {}
+                }
+            }
+            else if (msg.startsWith("!connect"))
+            {
+                try {
+                    if (singleton.createUser(id, msg.split(" ")[1]))
+                        channel.sendMessage("Compte créé avec succès.").queue();
+                    user = new Profil(id, msg.split(" ")[1]);
+                    profilsConnected.put(id, user);
+                    System.out.println(C_BLUE + "connected " + C_BASIC + profilsConnected.keySet());
+                    channel.sendMessage(user.execute(0)).queue();
+                } catch (IllegalArgumentException e) {
+                    channel.sendMessage("Mauvais password.").queue();
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    channel.sendMessage("Pas de password donné.").queue();
+                }
+            }
         }
         else if (event.isFromType(ChannelType.GROUP))   //If this message was sent to a Group. This is CLIENT only!
         {
             Group group = event.getGroup();
             String groupName = group.getName() != null ? group.getName() : "";  //A group name can be null due to it being unnamed.
 
-            System.out.printf("[GRP: %s]<%s>: %s\n", groupName, author.getName(), msg);
+            System.out.printf(C_GREEN + "[GRP: %s]<%s>: %s\n" + C_BASIC, groupName, author.getName(), msg);
         }
 
 
         if (msg.equals("!ping"))
         {
             channel.sendMessage("pong!").queue();
+        }
+        else if (msg.equals("!help"))
+        {
+            channel.sendMessage("Commandes :\n" +
+                    "*!help*\tObtenir la liste des commandes autorisées\n" +
+                    "*!connect <mdp>*\tSe connecter\n" +
+                    "").queue();
         }
     }
 }
