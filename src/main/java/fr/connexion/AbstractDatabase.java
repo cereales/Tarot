@@ -3,81 +3,73 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package game.connexion;
+package fr.connexion;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- *
+ * Allows to connect to a file.
+ * The file must be construct by rows (means separated by '\n' character)
+ * and by columns (separated by semicolon ';').
  * @author paul
  */
-public class Database {
-    private Map<String, List<String>> users;
-    private final String usersFile = "src/main/java/game/connexion/database.txt";
+public abstract class AbstractDatabase {
+    protected Map<String, List<String>> data;
+
+    private final String usersFile;
+    private final String DATABASE_STRUCT;
+    private final int nb_total_columns;
     
-    private static final String DATABASE_STRUCT = "LOGIN;MDP";
-    private static final int MDP_INDEX = 0;
-    
-    public Database() {
-        this.users = new HashMap();
-        fillDatabase(users, usersFile);
+    public AbstractDatabase(String filename, String databse_structure, int nb_total_columns) {
+        this.usersFile = filename;
+        this.DATABASE_STRUCT = databse_structure;
+        this.nb_total_columns = nb_total_columns;
+        this.data = new HashMap();
+        refreshFromDataFile();
     }
 
     /**
-     * Add the user to database.
-     * @param id
-     * @param mdp
-     * @return 
+     * Must returns the default value of the column if missing in the database.
+     * @param columnIndex starts at 0 for key (don't need to give default value to key)
+     * @return
      */
-    boolean addUser(String id, String mdp) { //TODO add verification
-        if (!users.containsKey(id)) {
-            List l = new LinkedList();
-            
-            // fields of a data input
-            l.add(mdp);
-            
-            users.put(id, l);
-            refreshDataFile();
-            return true;
-        }
-        return false;
+    protected abstract String getDefaultColumn(int columnIndex);
+
+    protected int getIntOf(String string) {
+        return Integer.valueOf(string);
     }
-    
+
+    protected String getStringOf(int num) {
+        return String.valueOf(num);
+    }
+
+
+
+
+
+
+    /*******************  Read from file  *******************/
+
     /**
-     * Checks if the user is in database.
-     * @param id
-     * @param mdp
-     * @return 
+     * Load database from File.
      */
-    boolean contains(String id, String mdp) {
-        return users.containsKey(id) && users.get(id).get(MDP_INDEX).equals(mdp);
+    public void refreshFromDataFile() {
+        fillDatabase(data, usersFile, nb_total_columns);
     }
-    
-    
-    
-    
-    
+
     /**
      * Fill the given database with the data from the file.
      * @param database
-     * @param dataFile 
+     * @param dataFile
+     * @param nb_total_columns expected number of columns in database
      */
-    private void fillDatabase(Map<String, List<String>> database, String dataFile) {
+    private void fillDatabase(Map<String, List<String>> database, String dataFile, int nb_total_columns) {
         String data = null;
         try {
             data = readDataFile(dataFile);
@@ -92,8 +84,11 @@ public class Database {
                     String[] columns = row.split(";");
                     List l = new LinkedList();
                     database.put(columns[0], l);
-                    for (int columnIndex = 1; columnIndex < columns.length; ++columnIndex) {
-                        l.add(columns[columnIndex]);
+                    for (int columnIndex = 1; columnIndex < nb_total_columns; ++columnIndex) {
+                        if (columnIndex < columns.length)
+                            l.add(columns[columnIndex].split("\r")[0]);
+                        else
+                            l.add(getDefaultColumn(columnIndex));
                     }
                 }
             }
@@ -128,11 +123,21 @@ public class Database {
         }
         return "";
     }
-    
-    
-    
-    
-    
+
+
+
+
+
+    /*******************  Write to file  *******************/
+
+    /**
+     * Write database in File.
+     */
+    public void refreshToDataFile() {
+        String data = getDataString();
+        writeDataFile(usersFile, data);
+    }
+
     /**
      * Write the whole input to the File.
      * @param dataFile
@@ -150,24 +155,16 @@ public class Database {
             ex.printStackTrace();
         }
     }
-    
-    /**
-     * Write database in File.
-     */
-    private void refreshDataFile() {
-        String data = getDataString();
-        writeDataFile(usersFile, data);
-    }
-    
+
     /**
      * Returns the adapted String that representes database.
      * @return 
      */
     private String getDataString() {
         String res = DATABASE_STRUCT + "\n";
-        for (String id : users.keySet()) {
-            res += id;
-            List<String> l = users.get(id);
+        for (String key : data.keySet()) {
+            res += key;
+            List<String> l = data.get(key);
             for (String e : l)
                 res += ";" + e;
             res += "\n";

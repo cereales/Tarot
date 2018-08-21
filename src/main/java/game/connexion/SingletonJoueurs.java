@@ -6,10 +6,7 @@
 package game.connexion;
 
 import game.tarot.Score;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -20,13 +17,13 @@ import java.util.TreeSet;
 public class SingletonJoueurs {
     private static SingletonJoueurs singleton;
     
-    private final Database database;
+    private final DatabaseUser database;
     private final Set<String> idConnected;
     
     
     private SingletonJoueurs() {
         idConnected = new TreeSet();
-        database = new Database();
+        database = new DatabaseUser();
     }
     
     public final static SingletonJoueurs getOccurence() {

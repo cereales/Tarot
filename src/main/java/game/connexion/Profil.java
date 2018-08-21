@@ -136,7 +136,7 @@ public class Profil extends PrivateProfil {
             cmd_state = state.JEU;
             return execute(0);
         case JEU:
-            String cmd_jeuExtended = ""; // no default box for switch(input): see general cases next
+            String cmd_jeuExtended = ""; // no default statement for switch(input): see general cases next
             switch (currentTable.getEtat()) {
             case INSCRIPTION:
                 cmd_jeuExtended = "\n\t3: ajouter ordi\n\t4: commencer";
@@ -175,7 +175,8 @@ public class Profil extends PrivateProfil {
                 return execute(0);
             case 3:
             default:
-                return cmd_jeu + cmd_jeuExtended;
+                return cmd_jeu + cmd_jeuExtended + "\n> "
+                        + currentTable;
             }
         default:
             return "ERROR: never reached";
