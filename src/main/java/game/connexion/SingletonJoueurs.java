@@ -6,10 +6,7 @@
 package game.connexion;
 
 import game.tarot.Score;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -20,17 +17,13 @@ import java.util.TreeSet;
 public class SingletonJoueurs {
     private static SingletonJoueurs singleton;
     
-    private Map<String, String> profils;
-    private Set<String> idConnected;
+    private final DatabaseUser database;
+    private final Set<String> idConnected;
     
     
     private SingletonJoueurs() {
         idConnected = new TreeSet();
-        profils = new HashMap();
-        profils.put("bob", "mdp1");
-        profils.put("paul", "mdp2");
-        profils.put("pierre", "mdp2");
-        profils.put("jacques", "mdp2");
+        database = new DatabaseUser();
     }
     
     public final static SingletonJoueurs getOccurence() {
@@ -41,11 +34,19 @@ public class SingletonJoueurs {
     
     
     public boolean contains(String id, String mdp) {
-        if (profils.containsKey(id) && profils.get(id).equals(mdp) && !idConnected.contains(id)) {
+        if (database.contains(id, mdp) && !idConnected.contains(id)) {
             idConnected.add(id);
             return true;
         }
         return false;
+    }
+    
+    public void disconnect(String id) {
+        idConnected.remove(id);
+    }
+    
+    public void createUser(String id, String mdp) {
+        database.addUser(id, mdp);
     }
 
     public Score getScore(String id, String mdp) {

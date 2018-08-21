@@ -25,11 +25,11 @@ public class Test extends AbstractTest {
         println("test etat : " + etat);
         etat = Etat.ABANDON;
         println("test etat : " + etat);
-        
+
         println("ecart enum : " + Etat.INSCRIPTION.compareTo(Etat.INTERRUPTION));
         println("ecart enum : " + Etat.INTERRUPTION.compareTo(Etat.INTERRUPTION));
         println("ecart enum : " + Etat.INTERRUPTION.compareTo(Etat.INSCRIPTION));
-        
+
         println("##   End   ##\n");
     }
 }

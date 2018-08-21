@@ -7,10 +7,6 @@ package game.tests;
 
 import game.connexion.Profil;
 import game.connexion.SingletonJoueurs;
-import game.tarot.Joueur;
-import game.tarot.Table;
-import static game.tests.AbstractTest.ASSERT_EQ;
-import static game.tests.AbstractTest.println;
 
 /**
  *
@@ -31,6 +27,10 @@ public class TestConnexion extends AbstractTest {
             ASSERT_EQ(1, 2); // ne doit pas etre execute
         } catch (IllegalArgumentException e) {}
         
+        singleton.createUser("pierre", "mdp");
+        singleton.disconnect("bob");
+        singleton.disconnect("pierre");
+
         println("\n##   End   ##\n");
     }
 }
