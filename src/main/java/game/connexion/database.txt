@@ -1,3 +1,0 @@
-LOGIN;MDP
-bob;mdp1
-pierre;mdp
