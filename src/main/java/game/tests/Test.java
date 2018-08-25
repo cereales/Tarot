@@ -14,7 +14,7 @@ import game.tarot.Etat;
  */
 public class Test extends AbstractTest {
     public static void main(String[] args) {
-        System.out.println("\n##  Start  ##");
+        println("\n##  Start  ##");
 
         Couleur c = Couleur.ATOUT;
         println("test import : " + c);
@@ -25,7 +25,11 @@ public class Test extends AbstractTest {
         println("test etat : " + etat);
         etat = Etat.ABANDON;
         println("test etat : " + etat);
-        
-        System.out.println("##   End   ##\n");
+
+        println("ecart enum : " + Etat.INSCRIPTION.compareTo(Etat.INTERRUPTION));
+        println("ecart enum : " + Etat.INTERRUPTION.compareTo(Etat.INTERRUPTION));
+        println("ecart enum : " + Etat.INTERRUPTION.compareTo(Etat.INSCRIPTION));
+
+        println("##   End   ##\n");
     }
 }

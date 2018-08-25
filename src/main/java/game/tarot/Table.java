@@ -5,6 +5,8 @@
  */
 package game.tarot;
 
+import game.connexion.PublicProfil;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -15,7 +17,8 @@ import java.util.Set;
  */
 public class Table {
     private List<Joueur> joueurs;
-    private List<Score>scores; // scores depuis la connexion
+    private List<PublicProfil> profils;
+    private List<Score> scores; // scores depuis la connexion
     private JeuCartes jeu;
     
     private int appelant;
@@ -32,17 +35,26 @@ public class Table {
      * Constructeur de la table de jeu.
      * Doit initialiser le jeu de carte. Table à 0 joueurs par défaut.
      */
-    public Table() {
+    protected Table() {
+        joueurs = new ArrayList();
+        profils = new ArrayList();
+        scores = new ArrayList();
+        jeu = new JeuCartes();
+        etat = Etat.INSCRIPTION;
     }
     
     
     /**
      * Permet d'ajouter un joueur à la table.
      * @param joueur doit déjà etre enregistré.
-     * @return False si la table est déjà pleine, True sinon.
+     * @return False si la table est déjà pleine ou le joueur deja dessus, True sinon.
      */
-    public boolean rejoindre(Joueur joueur) {
-        return false;
+    public boolean rejoindre(PublicProfil profil, Joueur joueur) {
+        if (joueurs.size() >= 5 || joueurs.contains(joueur)) // joueur est plus privé que le profil public
+            return false;
+        joueurs.add(joueur);
+        profils.add(profil);
+        return true;
     }
     
     /**
@@ -72,6 +84,18 @@ public class Table {
      */
     @Override
     public String toString() {
-        return "";
+        return "* TABLE " + getId() + " [" + etat.name() + "]";
+    }
+
+    public boolean isConnected(Joueur joueur) {
+        return joueurs.contains(joueur);
+    }
+
+    public Integer getId() {
+        return SingletonTables.getOccurence().getId(this);
+    }
+    
+    public Etat getEtat() {
+        return etat;
     }
 }

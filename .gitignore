@@ -2,4 +2,13 @@ build/
 pom.xml
 target/
 nbactions.xml
+classes/
+src/main/resources/
+
+.gradle/
+.idea/
+out/
+
+src/main/java/fr/connexion/PrivateInformations.java
+src/main/java/game/connexion/database.txt
 
