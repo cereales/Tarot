@@ -26,15 +26,25 @@ public class Joueur {
     }
     
     
-    
+
     /**
      * Ajoute les score au profil et reinitialise les scores du joueur.
-     * @param score 
+     * @param score
      *
     public void deconnecter(Score score) {
+    }*/
+
+    /**
+     * Interrompt le jeu en cours sur la table.
+     * @param table
+     * @return false si le jeu ne peut pas etre interrompu.
+     */
+    public boolean interrompre(Table table) {
+        return table.interrompre(this);
     }
-    
-    
+
+
+
     /**
      * Renvoie une copy de la main.
      * Permet de ne pas modifier la main.
@@ -62,28 +72,29 @@ public class Joueur {
         Couleur couleurAppelee = carteAppelee.getCouleur();
         int valeurAppelee = carteAppelee.getValeur();
         if (couleurAppelee.equals(Couleur.ATOUT)) {
-            if (hasAtoutSup(valeurAppelee))
-                copy.addAll(getAtoutsSup(valeurAppelee));
-            else if (hasAtout())
-                copy.addAll(getAtouts());
-            else
-                return getMain();
+            if (getAtoutsAuthorized(copy, valeurAppelee)) return getMain();
         } else {
             if (hasCouleur(couleurAppelee))
                 copy.addAll(getCouleurs(couleurAppelee));
-            else if (hasAtoutSup(maxAtoutOnTable))
-                copy.addAll(getAtoutsSup(maxAtoutOnTable));
-            else if (hasAtout())
-                copy.addAll(getAtouts());
-            else
-                return getMain();
+            else if (getAtoutsAuthorized(copy, maxAtoutOnTable)) return getMain();
         }
         if (main.contains(JeuCartes.bouts.get(0)))
             copy.add(JeuCartes.bouts.get(0));
         
         return copy;
     }
-    
+
+    // factorisation automatique de code
+    private boolean getAtoutsAuthorized(List<Carte> copy, int valeurAppelee) {
+        if (hasAtoutSup(valeurAppelee))
+            copy.addAll(getAtoutsSup(valeurAppelee));
+        else if (hasAtout())
+            copy.addAll(getAtouts());
+        else
+            return true;
+        return false;
+    }
+
     /**
      * Renvoie vrai si la main contient des atouts.
      * @return 

@@ -10,11 +10,11 @@ package game.tarot;
  * @author paul
  */
 public enum Etat {
-    INSCRIPTION ("descr"),
+    INSCRIPTION,
     INTERRUPTION,
     ABANDON,
     FIN,
-    DISTRIBUTION,
+    DISTRIBUTION ("descr"),
     MISES,
     APPEL,
     PLIS,
@@ -33,6 +33,10 @@ public enum Etat {
     
     @Override
     public String toString() {
-        return this.descr;
+        switch (this) {
+        case ABANDON:
+        default:
+            return this.descr;
+        }
     }
 }

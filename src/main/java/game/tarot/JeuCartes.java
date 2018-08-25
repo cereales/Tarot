@@ -158,7 +158,7 @@ public class JeuCartes {
      * This value might be in [firstIndex, lastIndex).
      * @param currentValue the value to increment of 1. Cannot be less than firstIndex.
      */
-    public int nextCircleIndex(int currentValue, int firstIndex, int lastIndex) {
+    public static int nextCircleIndex(int currentValue, int firstIndex, int lastIndex) {
         assert(firstIndex < lastIndex);
         ++currentValue;
         assert(firstIndex <= currentValue);

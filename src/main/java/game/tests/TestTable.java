@@ -34,21 +34,31 @@ public class TestTable extends AbstractTest {
         Joueur bob = Pbob.getJoueur();
         ASSERT_EQ(true, table.rejoindre(Pbob, bob));
         ASSERT_EQ(false, table.rejoindre(Pbob, bob));
-        singleton.disconnect("bob"); // allows other tests to run
 
         Computer Ppaul = new Computer();
         Joueur paul = Ppaul.getJoueur();
         ASSERT_EQ(true, table.rejoindre(Ppaul, paul));
 
+        ASSERT_EQ(true, paul.interrompre(table));
+        println(table);
+
         Computer Ppierre = new Computer();
         Joueur pierre = Ppierre.getJoueur();
         ASSERT_EQ(true, table.rejoindre(Ppierre, pierre));
+
+        ASSERT_EQ(false, table.commencer());
 
         Computer Pjacques = new Computer();
         Joueur jacques = Pjacques.getJoueur();
         ASSERT_EQ(true, table.rejoindre(Pjacques, jacques));
 
-        
+        ASSERT_EQ(true, table.commencer());
+        println(table);
+
+        ASSERT_EQ(true, table.reprendre());
+        println(table);
+
+        singleton.disconnect("bob"); // allows other tests to run
         println("\n##   End   ##\n");
     }
 }
