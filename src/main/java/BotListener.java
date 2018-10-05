@@ -144,7 +144,7 @@ public class BotListener extends PrivateInformations
         {
             channel.sendMessage("pong!").queue();
         }
-        else if (msg.equals("!help"))
+        else if (msg.equals("!help") && event.isFromType(ChannelType.PRIVATE))
         {
             channel.sendMessage("Commandes :\n" +
                     "*!help*\tObtenir la liste des commandes autorisées\n" +
