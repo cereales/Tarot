@@ -10,5 +10,6 @@ src/main/resources/
 out/
 
 src/main/java/fr/connexion/PrivateInformations.java
-src/main/java/game/connexion/database.txt
+sources/database.txt
+jarDirectory/
 

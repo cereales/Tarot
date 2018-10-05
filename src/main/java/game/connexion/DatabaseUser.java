@@ -18,7 +18,7 @@ public class DatabaseUser extends AbstractDatabase {
     private static final int MDP_INDEX = 0;
     
     public DatabaseUser() {
-        super("src/main/java/game/connexion/database.txt", "LOGIN;MDP", 2);
+        super("sources/database.txt", "LOGIN;MDP", 2);
     }
 
     @Override
